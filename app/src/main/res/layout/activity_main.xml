@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#081B33"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/id_Latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="50dp"
         android:text="Latitude"
+        android:textColor="#FCF7DE"
         app:layout_constraintBottom_toTopOf="@+id/id_Longitude"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
@@ -25,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
         android:text="Longitude: "
+        android:textColor="#FCF7DE"
         app:layout_constraintBottom_toTopOf="@+id/id_addressText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -34,9 +37,23 @@
         android:id="@+id/id_addressText"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="212dp"
+        android:layout_marginBottom="70dp"
         android:text="Address:"
         android:textAlignment="center"
+
+        android:textColor="#FCF7DE"
+        app:layout_constraintBottom_toBottomOf="@id/id_distanceText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/id_distanceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="260dp"
+        android:text="Distance: "
+        android:textColor="#FCF7DE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

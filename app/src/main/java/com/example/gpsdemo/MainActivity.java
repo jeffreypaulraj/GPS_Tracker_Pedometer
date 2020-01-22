@@ -27,10 +27,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     TextView longitudeText;
     TextView latitudeText;
     TextView addressText;
+    TextView distanceText;
     final int MY_PERMISSION_FINE_LOCATION = 1;
     LocationManager locationManager;
     List<Address> addressList;
     Geocoder myGeocoder;
+    ArrayList<Location> fullLocationList;
+    ArrayList<Float> fullDistanceList;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +43,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         longitudeText = findViewById(R.id.id_Longitude);
         latitudeText = findViewById(R.id.id_Latitude);
         addressText = findViewById(R.id.id_addressText);
+        distanceText = findViewById(R.id.id_distanceText);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         addressList =  new ArrayList<>();
+        fullDistanceList = new ArrayList<>();
+        fullLocationList = new ArrayList<>();
         myGeocoder = new Geocoder(this, Locale.US);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -58,6 +64,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public void onLocationChanged(Location location) {
         try {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(location!=null) {
+                fullLocationList.add(location);
+                if(fullLocationList.size() > 0){
+                    fullDistanceList.add(location.distanceTo(fullLocationList.get(0)));
+                    distanceText.setText("Distance: " + fullDistanceList.get(fullDistanceList.size() - 1) + " m");
+                }
+            }
+
             latitudeText.setText("Latitude: " + location.getLatitude());
             longitudeText.setText("Longitude: " + location.getLongitude());
         } catch (SecurityException e) { }
