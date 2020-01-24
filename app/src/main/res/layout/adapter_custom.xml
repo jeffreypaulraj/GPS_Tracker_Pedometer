@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/id_adapterLocationText"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:text="Location:"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/id_adapterDistanceText"
+            android:layout_width="47dp"
+            android:layout_height="33dp"
+            android:layout_weight="1"
+            android:text="Distance:"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/id_adapterTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Time: "
+            android:textAlignment="center" />
+    </LinearLayout>
+</LinearLayout>
