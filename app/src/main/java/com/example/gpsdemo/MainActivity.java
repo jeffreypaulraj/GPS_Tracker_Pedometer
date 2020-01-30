@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.List;
@@ -40,11 +41,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     final int MY_PERMISSION_FINE_LOCATION = 1;
     LocationManager locationManager;
     List<Address> addressList;
-    ListView locationListView;
-    List<DestinationLog> locationLVList;
     Geocoder myGeocoder;
     ArrayList<Location> fullLocationList;
     ArrayList<Float> fullDistanceList;
+    float fullDistance;
     ArrayList<Long> timeLocationList;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -62,11 +62,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         fullDistanceList = new ArrayList<>();
         fullLocationList = new ArrayList<>();
         timeLocationList = new ArrayList<>();
-        locationLVList = new ArrayList<>();
-        locationListView = findViewById(R.id.listView);
+        fullDistance = (float)0;
+        fullDistanceList.add(fullDistance);
         myGeocoder = new Geocoder(this, Locale.US);
-        CustomAdapter customAdapter = new CustomAdapter(this,R.layout.adapter_custom ,locationLVList);
-        locationListView.setAdapter(customAdapter);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_FINE_LOCATION);
@@ -76,37 +74,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-    public class CustomAdapter extends ArrayAdapter<DestinationLog> {
-
-        List<DestinationLog> arrayList;
-        Context parentContext;
-        int xmlResource;
-        public CustomAdapter(@NonNull Context context, int resource, @NonNull List<DestinationLog> objects) {
-            super(context, resource, objects);
-            arrayList = objects;
-            parentContext = context;
-            xmlResource = resource;
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater layoutInflater = (LayoutInflater) parentContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            View view = layoutInflater.inflate(R.layout.adapter_custom, null);
-
-            TextView locationText = view.findViewById(R.id.id_adapterLocationText);
-            TextView distanceText = view.findViewById(R.id.id_adapterDistanceText);
-            TextView timeText = view.findViewById(R.id.id_adapterTimeText);
-
-
-
-            return view;
-        }
-    }
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) { }
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(Location location) { 
         try {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             long time = SystemClock.elapsedRealtime()/1000;
@@ -116,12 +87,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     timeLocationList.add(time);
                 }
                 else{
-                    timeLocationList.add(time - timeLocationList.get(timeLocationList.size() - 1));
+                    Long currentTime = timeLocationList.get(timeLocationList.size() - 1);
+                    if(currentTime < 20000){
+                        timeLocationList.add(time - currentTime);
+                        timeText.setText("Elapsed Time: " + timeLocationList.get(timeLocationList.size() - 1)+ " s");
+                    }
+
                 }
-                timeText.setText("Elapsed Time: " + timeLocationList.get(timeLocationList.size() - 1)+ " s");
-                if(fullLocationList.size() > 0){
-                    fullDistanceList.add(location.distanceTo(fullLocationList.get(0)));
-                    distanceText.setText("Distance: " + fullDistanceList.get(fullDistanceList.size() - 1) + " m");
+                if(fullLocationList.size() > 2){
+                    //fullDistanceList.add(location.distanceTo(fullLocationList.get(fullDistanceList.size() - 1)));
+                    fullDistance += location.distanceTo(fullLocationList.get(fullLocationList.size() - 2));
+                    distanceText.setText("Distance: " + fullDistance + " m");
                 }
             }
 
@@ -152,22 +128,4 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-    public class DestinationLog{
-
-        String address;
-        Float distance;
-        Long timeSpent;
-
-        public DestinationLog(String address, Float distance, Long timeSpent){
-            this.address =address;
-            this.distance = distance;
-            this.timeSpent = timeSpent;
-        }
-
-        public String getAddress() { return address; }
-
-        public Float getDistance() { return distance; }
-
-        public Long getTimeSpent() { return timeSpent; }
-    }
 }
