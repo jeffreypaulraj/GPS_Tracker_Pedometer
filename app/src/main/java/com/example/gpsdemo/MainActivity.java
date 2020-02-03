@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) { }
     @Override
-    public void onLocationChanged(Location location) { 
+    public void onLocationChanged(Location location) {
         try {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             long time = SystemClock.elapsedRealtime()/1000;
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             case MY_PERMISSION_FINE_LOCATION:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     try {
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
                     }
                     catch (SecurityException e){ }
                 }
